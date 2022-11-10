@@ -15,11 +15,16 @@ app.get('/api/v1/tours', (req, res) => {
     },
   });
 });
-// NOTE get a specifice tour
+// NOTE get a specifice tour by Id
 app.get('/api/v1/tours/:id', (req, res) => {
-  const rId = req.params.id;
-  const tour = tours.find((e) => e.id === +rId);
-
+  const rId = req.params.id * 1;
+  const tour = tours.find((e) => e.id === rId);
+  if (!tour) {
+    return res.status(404).send({
+      status: 'fail',
+      message: 'Invalid id number',
+    });
+  }
   res.status(200).send({
     status: 'success',
     data: {
@@ -30,17 +35,40 @@ app.get('/api/v1/tours/:id', (req, res) => {
 //NOTE create a new tour
 app.post('/api/v1/tours', function (req, res) {
   const id = tours[tours.length - 1].id + 1;
-  const newTour = Object.assign({ id: id }, req.body);
+  const newTour = Object.assign({ id }, req.body);
   tours.push(newTour);
   fs.writeFile(
     './dev-data/data/tours-simple.json',
     JSON.stringify(tours),
     (err) => {
-      console.log('done');
       res.status(201).send({
         status: 'success',
         data: {
           tour: newTour,
+        },
+      });
+    }
+  );
+});
+//NOTE update user
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+  const { name, duration } = req.body;
+  const id = req.params.id * 1;
+  const updatedTour = tours.find((e) => e.id === id);
+  if (!updatedTour) {
+    return res.status(404).send('Invalid Id');
+  }
+  updatedTour.name = name;
+  updatedTour.duration = duration;
+  fs.writeFile(
+    './dev-data/data/tours-simple.json',
+    JSON.stringify(tours),
+    (err) => {
+      res.status(200).send({
+        status: 'success',
+        data: {
+          updatedTour,
         },
       });
     }
