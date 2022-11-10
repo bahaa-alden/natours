@@ -5,6 +5,7 @@ const app = express();
 app.use(express.json());
 const port = 3000;
 
+//NOTE get all tours
 app.get('/api/v1/tours', (req, res) => {
   res.json({
     status: 200,
@@ -14,6 +15,19 @@ app.get('/api/v1/tours', (req, res) => {
     },
   });
 });
+// NOTE get a specifice tour
+app.get('/api/v1/tours/:id', (req, res) => {
+  const rId = req.params.id;
+  const tour = tours.find((e) => e.id === +rId);
+
+  res.status(200).send({
+    status: 'success',
+    data: {
+      tour,
+    },
+  });
+});
+//NOTE create a new tour
 app.post('/api/v1/tours', function (req, res) {
   const id = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: id }, req.body);
@@ -32,4 +46,5 @@ app.post('/api/v1/tours', function (req, res) {
     }
   );
 });
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
