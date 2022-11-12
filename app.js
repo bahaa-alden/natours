@@ -15,13 +15,13 @@ const logger = function (req, res, next) {
 app.use(logger);
 
 //3)Routes
-
-
-/* NOTE after define route we use it in our app like middleware and we dont need next fun caues
+/*
+NOTE after define route we use it in our app like middleware
+NOTE and we dont need next fun caues
 NOTE we are in res.send
 NOTE and called sub application */
-app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/tours', tourRouter); // for route(URL) /api/v1/tours we use tourRouter (tour niddlware in url /api/v1/tours)
+app.use('/api/v1/users', userRouter); //it means for route(URL) /api/v1/users we use userRouter
+//and the ohter middlware like morgan used in the  all routes
 //4)Start the server
-const port = 3000;
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+module.exports = app;
