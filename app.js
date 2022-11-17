@@ -14,6 +14,7 @@ const logger = function (req, res, next) {
 };
 app.use(logger);
 
+
 //3)Routes
 /*
 NOTE after define route we use it in our app like middleware

@@ -1,7 +1,23 @@
 ﻿const fs = require('fs');
-const { dirname } = require('path');
-const tours = require('../dev-data/data/tours-simple.json');
 
+const tours = require('../dev-data/data/tours-simple.json');
+exports.cheackId = (req, res, next, val) => {
+  if (val * 1 > tours.length - 1)
+    return res.status(404).send({ status: 'fail', message: 'Invalid Id' });
+  next();
+};
+
+exports.cheakBody = (req, res, next) => {
+  if (
+    Object.keys(req.body).filter(
+      (e) => e === 'name' || 'duration' || 'maxGroupSize' || 'difficulty'
+    ).length < 4
+  ) {
+    return res.status(404).send({ status: 'failed', message: 'no data' });
+  }
+  next();
+};
+//NOTE these funcs do not have to worry about any error they just do what they made for it
 exports.getAllTours = (req, res) => {
   res.json({
     status: 200,
@@ -16,12 +32,7 @@ exports.getAllTours = (req, res) => {
 exports.getTour = (req, res) => {
   const rId = req.params.id * 1;
   const tour = tours.find((e) => e.id === rId);
-  if (!tour) {
-    return res.status(404).send({
-      status: 'fail',
-      message: 'Invalid id number',
-    });
-  }
+
   res.status(200).send({
     status: 'success',
     data: {
@@ -52,9 +63,7 @@ exports.updateTour = (req, res) => {
   const { name, duration } = req.body;
   const id = req.params.id * 1;
   const updatedTour = tours.find((e) => e.id === id);
-  if (!updatedTour) {
-    return res.status(404).send({ status: 'fail', message: 'Invalid Id' });
-  }
+
   updatedTour.name = name;
   updatedTour.duration = duration;
   fs.writeFile(
@@ -74,8 +83,7 @@ exports.updateTour = (req, res) => {
 //NOTE delete user
 exports.deleteTour = (req, res) => {
   const id = req.params.id * 1;
-  if (id > tours.length - 1)
-    return res.status(404).send({ status: 'fail', message: 'Invalid Id' });
+
   const newTours = tours.filter((e) => {
     return e.id !== id;
   });

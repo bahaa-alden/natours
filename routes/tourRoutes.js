@@ -1,6 +1,8 @@
 ﻿const express = require('express');
 const router = express.Router();
 const tourController = require('../controllers/tourController');
+router.param('id', tourController.cheackId);
+router.use(tourController.cheakBody);
 /*
 NOTE  when we use middleware route we send with him the direct path and inside
 NOTE  the route we dont need to write the url another time caues in father
