@@ -1,6 +1,7 @@
 ﻿const express = require('express');
 const fs = require('fs');
 const morgan = require('morgan');
+const { dirname } = require('path');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const app = express();
@@ -8,12 +9,12 @@ const app = express();
 //1)midllewares
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.static(`${__dirname}/public`));
 const logger = function (req, res, next) {
   req.requestTime = new Date().toISOString();
   next();
 };
 app.use(logger);
-
 
 //3)Routes
 /*

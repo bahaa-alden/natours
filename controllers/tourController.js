@@ -8,9 +8,10 @@ exports.cheackId = (req, res, next, val) => {
 };
 
 exports.cheakBody = (req, res, next) => {
-  const body = Object.keys(req.body);
-  if (!body.includes('name') && !body.includes('price')) {
-    return res.status(400).send({ status: 'failed', message: 'no data' });
+  if (!req.body.name || !req.body.price) {
+    return res
+      .status(400)
+      .send({ status: 'failed', message: 'missing name or price' });
   }
   next();
 };

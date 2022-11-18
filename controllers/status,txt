@@ -1,0 +1,5 @@
+﻿400 bad request
+404 error
+200 good get
+201 create post
+204 delete
