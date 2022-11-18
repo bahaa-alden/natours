@@ -8,12 +8,9 @@ exports.cheackId = (req, res, next, val) => {
 };
 
 exports.cheakBody = (req, res, next) => {
-  if (
-    Object.keys(req.body).filter(
-      (e) => e === 'name' || 'duration' || 'maxGroupSize' || 'difficulty'
-    ).length < 4
-  ) {
-    return res.status(404).send({ status: 'failed', message: 'no data' });
+  const body = Object.keys(req.body);
+  if (!body.includes('name') && !body.includes('price')) {
+    return res.status(400).send({ status: 'failed', message: 'no data' });
   }
   next();
 };
