@@ -1,6 +1,7 @@
-﻿const fs = require('fs');
-
+﻿/* eslint-disable node/no-unsupported-features/es-syntax */
+const fs = require('fs');
 const tours = require('../dev-data/data/tours-simple.json');
+
 exports.cheackId = (req, res, next, val) => {
   if (val * 1 > tours.length - 1)
     return res.status(404).send({ status: 'fail', message: 'Invalid Id' });
@@ -40,12 +41,13 @@ exports.getTour = (req, res) => {
 };
 exports.createTour = (req, res) => {
   const id = tours[tours.length - 1].id + 1;
-  const newTour = Object.assign({ id }, req.body);
+  const newTour = { id, ...req.body };
   tours.push(newTour);
   fs.writeFile(
     `./dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
     (err) => {
+      console.log(err);
       res.status(201).send({
         status: 'success',
         data: {
@@ -67,7 +69,7 @@ exports.updateTour = (req, res) => {
   fs.writeFile(
     './dev-data/data/tours-simple.json',
     JSON.stringify(tours),
-    (err) => {
+    () => {
       res.status(200).send({
         status: 'success',
         data: {
@@ -81,14 +83,11 @@ exports.updateTour = (req, res) => {
 //NOTE delete user
 exports.deleteTour = (req, res) => {
   const id = req.params.id * 1;
-
-  const newTours = tours.filter((e) => {
-    return e.id !== id;
-  });
+  const newTours = tours.filter((e) => e.id !== id);
   fs.writeFile(
     './dev-data/data/tours-simple.json',
     JSON.stringify(newTours),
-    (err) => {
+    () => {
       res.status(204).send({ status: 'success', data: null });
     }
   );
