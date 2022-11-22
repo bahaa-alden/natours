@@ -57,7 +57,6 @@ exports.createTour = (req, res) => {
     }
   );
 };
-
 //NOTE update user
 exports.updateTour = (req, res) => {
   const { name, duration } = req.body;
