@@ -2,8 +2,7 @@
 const tourController = require('../controllers/tourController');
 
 const router = express.Router();
-router.param('id', tourController.cheackId);
-
+// router.param('id', tourController.cheackId);
 /*
 NOTE  when we use middleware route we send with him the direct path and inside
 NOTE  the route we dont need to write the url another time caues in father
@@ -11,7 +10,7 @@ NOTE  app we use the route and send the url with and inside the route we deal wi
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(tourController.cheakBody, tourController.createTour);
+  .post(tourController.createTour);
 
 router
   .route('/:id')
