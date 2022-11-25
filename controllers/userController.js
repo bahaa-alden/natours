@@ -1,12 +1,13 @@
-﻿const User = require('../models/userModel');
+﻿/* eslint-disable import/extensions */
+import User from '../models/userModel.js';
 
-exports.getAllUsers = (req, res) => {
+export function getAllUsers(req, res) {
   res.status(500).json({
     status: 'error',
     message: 'the route is not yet define',
   });
-};
-exports.createUser = async (req, res) => {
+}
+export async function createUser(req, res) {
   try {
     const newUser = await User.create(req.body);
     res.status(201).send({
@@ -21,25 +22,25 @@ exports.createUser = async (req, res) => {
       message: 'Invalid data sent!',
     });
   }
-};
+}
 
-exports.getUser = (req, res) => {
+export function getUser(req, res) {
   res.status(500).json({
     status: 'error',
     message: 'the route is not yet define',
   });
-};
+}
 
-exports.updateUser = (req, res) => {
+export function updateUser(req, res) {
   res.status(500).json({
     status: 'error',
     message: 'the route is not yet define',
   });
-};
+}
 
-exports.deleteUser = (req, res) => {
+export function deleteUser(req, res) {
   res.status(500).json({
     status: 'error',
     message: 'the route is not yet define',
   });
-};
+}

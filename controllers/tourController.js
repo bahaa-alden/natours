@@ -1,8 +1,9 @@
-﻿/* eslint-disable node/no-unsupported-features/es-syntax */
-const Tour = require('../models/tourModel');
+﻿/* eslint-disable import/extensions */
+/* eslint-disable node/no-unsupported-features/es-syntax */
+import Tour from '../models/tourModel.js';
 
 //NOTE these funcs do not have to worry about any error they just do what they made for it
-exports.getAllTours = async (req, res) => {
+export async function getAllTours(req, res) {
   try {
     const tours = await Tour.find();
     res.json({
@@ -18,25 +19,33 @@ exports.getAllTours = async (req, res) => {
       message: err,
     });
   }
-};
+}
 
-exports.getTour = async (req, res) => {
+export async function getTour(req, res) {
   try {
     const tour = await Tour.findById(req.params.id);
-    res.status(200).send({
-      status: 'success',
-      data: {
-        tour,
-      },
-    });
+
+    if (tour !== null) {
+      res.status(200).send({
+        status: 'success',
+        data: {
+          tour,
+        },
+      });
+    } else {
+      res.status(404).json({
+        status: 'fail',
+        message: 'Invalid id',
+      });
+    }
   } catch (err) {
     res.status(404).json({
       status: 'fail',
       message: err,
     });
   }
-};
-exports.createTour = async (req, res) => {
+}
+export async function createTour(req, res) {
   //newTour=new Tour({})
   //newTour.save()
   try {
@@ -53,9 +62,9 @@ exports.createTour = async (req, res) => {
       message: err,
     });
   }
-};
+}
 //NOTE update user
-exports.updateTour = async (req, res) => {
+export async function updateTour(req, res) {
   try {
     const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -73,10 +82,10 @@ exports.updateTour = async (req, res) => {
       message: err,
     });
   }
-};
+}
 
 //NOTE delete user
-exports.deleteTour = async (req, res) => {
+export async function deleteTour(req, res) {
   try {
     // eslint-disable-next-line no-unused-vars
     await Tour.findByIdAndRemove(req.params.id);
@@ -87,4 +96,4 @@ exports.deleteTour = async (req, res) => {
       message: err,
     });
   }
-};
+}

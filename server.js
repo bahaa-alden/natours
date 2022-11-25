@@ -1,8 +1,10 @@
-﻿const dotenv = require('dotenv');
-const mongoose = require('mongoose');
-const app = require('./app');
+﻿/* eslint-disable no-console */
+/* eslint-disable import/extensions */
+import { config } from 'dotenv';
+import mongoose from 'mongoose';
+import app from './app.js';
 
-dotenv.config({ path: './config.env' });
+config({ path: './config.env' });
 
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
@@ -11,7 +13,7 @@ mongoose
     useCreateIndex: true,
     useFindAndModify: false,
   })
-  .then(() => console.log('DB connection successed'));
+  .then(() => console.log('DB connection succeeded'));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
