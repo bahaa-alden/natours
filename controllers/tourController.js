@@ -4,7 +4,7 @@
 export async function getAllTours(req, res) {
   try {
     //Building query
-    console.log(req.query);
+
     //Filtering
     const queryObj = { ...req.query };
     const excludedFields = ['limit', 'sort', 'page', 'fields'];
@@ -16,9 +16,12 @@ export async function getAllTours(req, res) {
       /\b(gt|gte|lt|lte)\b/gi,
       (match) => `$${match}`
     );
-    console.log(JSON.parse(queryString));
-    const query = Tour.find(JSON.parse(queryString));
-
+    let query = Tour.find(JSON.parse(queryString));
+    //Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    }
     const tours = await query;
     res.json({
       status: 200,
