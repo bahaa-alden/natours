@@ -1,10 +1,25 @@
-﻿
-import Tour from '../models/tourModel.js';
+﻿import Tour from '../models/tourModel.js';
 
 //NOTE these funcs do not have to worry about any error they just do what they made for it
 export async function getAllTours(req, res) {
   try {
-    const tours = await Tour.find();
+    //Building query
+    console.log(req.query);
+    //Filtering
+    const queryObj = { ...req.query };
+    const excludedFields = ['limit', 'sort', 'page', 'fields'];
+    excludedFields.forEach((el) => delete queryObj[el]);
+
+    //Advance Filtering
+    let queryString = JSON.stringify(queryObj);
+    queryString = queryString.replace(
+      /\b(gt|gte|lt|lte)\b/gi,
+      (match) => `$${match}`
+    );
+    console.log(JSON.parse(queryString));
+    const query = Tour.find(JSON.parse(queryString));
+
+    const tours = await query;
     res.json({
       status: 200,
       result: tours.length,
