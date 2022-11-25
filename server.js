@@ -1,5 +1,4 @@
-﻿/* eslint-disable no-console */
-/* eslint-disable import/extensions */
+﻿
 import { config } from 'dotenv';
 import mongoose from 'mongoose';
 import app from './app.js';

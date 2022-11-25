@@ -1,4 +1,4 @@
-﻿/* eslint-disable import/extensions */
+﻿
 import User from '../models/userModel.js';
 
 export function getAllUsers(req, res) {

@@ -9,7 +9,7 @@
         "parser": "flow"
       }
     ],
-
+    "import/extensions": [ "never" , "always" ,"ignorePackages"],
     "spaced-comment": "off",
     "no-console": "warn",
     "consistent-return": "off",

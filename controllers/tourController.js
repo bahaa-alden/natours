@@ -1,5 +1,4 @@
-﻿/* eslint-disable import/extensions */
-/* eslint-disable node/no-unsupported-features/es-syntax */
+﻿
 import Tour from '../models/tourModel.js';
 
 //NOTE these funcs do not have to worry about any error they just do what they made for it
