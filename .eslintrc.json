@@ -8,7 +8,7 @@
         "singleQuote": true,
         "parser": "flow"
       }
-    ],"import/extensions": [ "error","never",{"js":"always","json":"always"} ],
+    ],"import/extensions": [ "error","never",{"js":"always"} ],
     "spaced-comment": "off",
     "no-console": "warn",
     "consistent-return": "off",
