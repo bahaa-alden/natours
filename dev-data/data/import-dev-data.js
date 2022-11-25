@@ -1,5 +1,4 @@
-﻿
-import { config } from 'dotenv';
+﻿import { config } from 'dotenv';
 import mongoose from 'mongoose';
 import fs from 'fs';
 import Tour from '../../models/tourModel.js';
@@ -15,10 +14,7 @@ mongoose
   })
   .then(() => console.log('DB connection successes'));
 
-const tours = JSON.parse(
-  // eslint-disable-next-line no-undef
-  fs.readFileSync(`./tours-simple.json`, 'utf-8')
-);
+const tours = JSON.parse(fs.readFileSync(`./tours-simple.json`, 'utf-8'));
 
 const importData = async () => {
   try {

@@ -1,5 +1,4 @@
-﻿
-import User from '../models/userModel.js';
+﻿import User from '../models/userModel.js';
 
 export function getAllUsers(req, res) {
   res.status(500).json({

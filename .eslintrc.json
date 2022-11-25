@@ -8,8 +8,7 @@
         "singleQuote": true,
         "parser": "flow"
       }
-    ],
-    "import/extensions": [ "never" , "always" ,"ignorePackages"],
+    ],"import/extensions": [ "error","never",{"js":"always","json":"always"} ],
     "spaced-comment": "off",
     "no-console": "warn",
     "consistent-return": "off",
