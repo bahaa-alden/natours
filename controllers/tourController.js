@@ -97,7 +97,6 @@ export const updateTour = async (req, res) => {
     });
   }
 };
-
 //NOTE delete user
 export const deleteTour = async (req, res) => {
   try {
