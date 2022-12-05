@@ -1,7 +1,6 @@
 ﻿import { config } from 'dotenv';
 import mongoose from 'mongoose';
-import app from './app.js';
-//bahaa
+
 config({ path: './config.env' });
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
