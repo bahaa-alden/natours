@@ -1,7 +1,7 @@
 ﻿import { config } from 'dotenv';
 import mongoose from 'mongoose';
 import app from './app.js';
-
+//bahaa
 config({ path: './config.env' });
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
@@ -15,4 +15,3 @@ mongoose
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-
