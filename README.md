@@ -1,1 +1,1 @@
-# natours app using mogoDb nodeJS
+# natours app using mongoDB nodeJS
