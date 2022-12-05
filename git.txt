@@ -1,4 +1,0 @@
-git add -u
-git reset -- config.env
- git commit -c origin/main
-git push
