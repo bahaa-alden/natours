@@ -1,4 +1,4 @@
 git add -u
 git reset -- config.env
-commit
+commit origin/main
 push
