@@ -102,6 +102,7 @@ tourSchema.pre('save', function (next) {
 
 //Query Middleware
 tourSchema.pre(/^find/, function (next) {
+  //only the normal tours that have secretTour===false
   this.find({ secretTour: { $ne: true } });
   next();
 });
@@ -111,6 +112,7 @@ tourSchema.pre(/^find/, function (next) {
 
 //aggregation MiddleWare
 tourSchema.pre('aggregate', function (next) {
+  //use unshift for adding in the start of the pipeline's Array
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
   next();
 });
