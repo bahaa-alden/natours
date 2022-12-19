@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 import app from './app.js';
 
 config({ path: './config.env' });
-const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
+//const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
-  .connect(DB, {
+  .connect(process.env.DATABASE_LOCAL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,

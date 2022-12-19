@@ -23,7 +23,14 @@ NOTE we are in res.send
 NOTE and called sub application */
 app.use('/api/v1/tours', tourRouter); // for route(URL) /api/v1/tours we use tourRouter (tour middleware in url /api/v1/tours)
 app.use('/api/v1/users', userRouter); //it means for route(URL) /api/v1/users we use userRouter
+//for other routes
+app.all('*', (req, res, next) => {
+  res.status(404).send({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} on this server`,
+  });
+  next();
+});
 //and the other middleware like morgan used in the  all routes
-//4)Start the server
 
 export default app;
