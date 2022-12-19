@@ -31,6 +31,7 @@ app.all('*', (req, res, next) => {
   });
   next();
 });
+
 //and the other middleware like morgan used in the  all routes
 
 export default app;
