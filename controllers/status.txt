@@ -3,7 +3,7 @@
 200 good get
 201 create post
 204 delete
-
+401 bad auth
 for read from config use (import config from dotenv) then give path to config and get to vars using process.env.var
 
 We delete excluded fields from route because that affect on filtering

@@ -18,6 +18,12 @@ const handleValidatorErrorDB = (err) => {
   return new AppError(400, message);
 };
 
+const handleJWTError = () =>
+  new AppError(401, 'Invalid token, please log in again');
+
+const handleJWTExpiredError = () =>
+  new AppError(401, 'Your token has expired!, please log in again');
+
 const sendErrorDev = (err, res) => {
   //development error
   res.status(err.statusCode).json({
@@ -39,14 +45,13 @@ const sendErrorProd = (err, res) => {
   else {
     //1) log error
     console.error('Error');
-
     //2) send generic message :don't leak error details
     res
       .status(500)
       .json({ status: 'error', message: 'Something went very wrong' });
   }
 };
-export default (err, req, res, next) => {
+export default (err, req, res) => {
   //if there is not a statusCode that mean internalServerError 500 and status "error"
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -57,6 +62,9 @@ export default (err, req, res, next) => {
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateErrorDB(error);
     if (error.name === 'ValidationError') error = handleValidatorErrorDB(error);
+    if (error.name === 'JsonWebTokenError') error = handleJWTError(error);
+    if (error.name === 'TokenExpiredError')
+      error = handleJWTExpiredError(error);
     sendErrorProd(error, res);
   }
 };

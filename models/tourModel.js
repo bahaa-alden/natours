@@ -85,20 +85,12 @@ const tourSchema = new Schema(
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
-// tourSchema.virtual('payInDay').get(function () {
-//   return this.price / this.duration;
-// });
 
 //Document Middleware
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true, trim: true });
   next();
 });
-//we can add another pre middleware
-// tourSchema.post('save', (doc, next) => {
-//   console.log(doc);
-//   next();
-// });
 
 //Query Middleware
 tourSchema.pre(/^find/, function (next) {
@@ -106,9 +98,6 @@ tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
   next();
 });
-// tourSchema.post(/^find/, function (docs, next) {
-//   next();
-// });
 
 //aggregation MiddleWare
 tourSchema.pre('aggregate', function (next) {

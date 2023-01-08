@@ -1,5 +1,5 @@
 ﻿import mongoose from 'mongoose';
-import './unCaughtException.js';
+import './utils/unCaughtException.js';
 import app from './app.js';
 
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
