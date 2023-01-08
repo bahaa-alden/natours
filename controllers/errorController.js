@@ -51,7 +51,7 @@ const sendErrorProd = (err, res) => {
       .json({ status: 'error', message: 'Something went very wrong' });
   }
 };
-export default (err, req, res) => {
+export default (err, req, res, next) => {
   //if there is not a statusCode that mean internalServerError 500 and status "error"
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
@@ -62,9 +62,8 @@ export default (err, req, res) => {
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateErrorDB(error);
     if (error.name === 'ValidationError') error = handleValidatorErrorDB(error);
-    if (error.name === 'JsonWebTokenError') error = handleJWTError(error);
-    if (error.name === 'TokenExpiredError')
-      error = handleJWTExpiredError(error);
+    if (error.name === 'JsonWebTokenError') error = handleJWTError();
+    if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
     sendErrorProd(error, res);
   }
 };

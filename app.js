@@ -1,12 +1,10 @@
 ﻿import express from 'express';
 import morgan from 'morgan';
-import { config } from 'dotenv';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import globalErrorHandler from './controllers/errorController.js';
 import AppError from './utils/appError.js';
 
-config();
 const app = express();
 //1)middleware
 if (process.env.NODE_ENV === 'development') {
@@ -28,6 +26,7 @@ app.all('*', (req, res, next) => {
   //req.originalURl mean the route was sent
   next(new AppError(404, `Can't find ${req.originalUrl} on this server`)); //skip all middleware and go to the errors handler
 });
+
 app.use(globalErrorHandler);
 //and the other middleware like morgan used in the  all routes
 

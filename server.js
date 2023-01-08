@@ -1,7 +1,9 @@
 ﻿import mongoose from 'mongoose';
 import './utils/unCaughtException.js';
+import { config } from 'dotenv';
 import app from './app.js';
 
+config();
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
   .connect(DB, {
