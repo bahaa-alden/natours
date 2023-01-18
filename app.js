@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
+import csrf from 'csurf';
 import xss from 'xss-clean';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
@@ -11,6 +12,7 @@ import AppError from './utils/appError.js';
 
 const app = express();
 
+app.use(csrf());
 //Set security headers
 app.use(helmet());
 
