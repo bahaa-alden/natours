@@ -3,7 +3,6 @@ import morgan from 'morgan';
 import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
-import csrf from 'csurf';
 import xss from 'xss-clean';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
@@ -12,7 +11,6 @@ import AppError from './utils/appError.js';
 
 const app = express();
 
-app.use(csrf());
 //Set security headers
 app.use(helmet());
 
@@ -23,6 +21,7 @@ if (process.env.NODE_ENV === 'development') {
 
 //Avoid exploit Node.js security weaknesses
 app.disable('x-powered-by');
+
 //Limit the requests for the same IP
 const limiter = rateLimit({
   max: 100,

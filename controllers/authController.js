@@ -6,8 +6,6 @@ import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 import sendEmail from '../utils/email.js';
 
-// import AppError from '../utils/appError.js';
-
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -25,8 +23,6 @@ const createSendToken = (user, statusCode, res) => {
   res.cookie('jwt', token, cookieOptions);
   //remove password from output
   user.password = undefined;
-  user.logInTimes = undefined;
-  user.bannedForHour = undefined;
 
   res.status(statusCode).send({
     status: 'success',
@@ -69,6 +65,11 @@ export const login = catchAsync(async (req, res, next) => {
           ).getMinutes()} Minutes`
         : 'Incorrect password or email';
     return next(new AppError(401, message));
+  }
+  if (user.logInTimesTimes || user.bannedForHour) {
+    user.logInTimes = undefined;
+    user.bannedForHour = undefined;
+    await user.save({ validateBeforeSave: false });
   }
   createSendToken(user, 200, res);
 });
