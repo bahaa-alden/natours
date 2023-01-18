@@ -14,11 +14,11 @@ import {
   deleteMe,
 } from '../controllers/userController.js';
 
-// const csrfProtection = csrf();
+const csrfProtection = csrf();
 const router = Router();
-router.route('/signup').post(signup);
-router.route('/login').post(login);
-router.route('/forgotPassword').post(forgotPassword);
+router.route('/signup').post(csrfProtection, signup);
+router.route('/login').post(csrfProtection, login);
+router.route('/forgotPassword').post(csrfProtection, forgotPassword);
 router.route('/resetPassword/:token').patch(resetPassword);
 router.route('/updateMyPassword').patch(protect, updatePassword);
 router.route('/updateMe').patch(protect, updateMe);

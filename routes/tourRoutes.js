@@ -1,4 +1,5 @@
 ﻿import { Router } from 'express';
+import csrf from 'csurf';
 import { protect, restrictTo } from '../controllers/authController.js';
 import {
   getTour,
@@ -12,7 +13,9 @@ import {
 } from '../controllers/tourController.js';
 
 const router = Router();
-// router.param('id', tourController.checkId);
+
+const csrfProtection = csrf();
+
 /*
 NOTE  when we use middleware route we send with him the direct path and inside
 NOTE  the route we don't need to write the url another time cause in father
@@ -20,7 +23,7 @@ NOTE  app we use the route and send the url with and inside the route we deal wi
 router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 router.route('/tour-stats').get(getTourStats);
 router.route('/monthly-plan/:year').get(getMonthlyPlan);
-router.route('/').get(protect, getAllTours).post(createTour);
+router.route('/').get(protect, getAllTours).post(csrfProtection, createTour);
 
 router
   .route('/:id')
