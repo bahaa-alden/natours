@@ -46,6 +46,15 @@ const userSchema = new Schema(
       default: true,
       select: false,
     },
+    logInTimes: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
+    bannedForHour: {
+      type: Date,
+      select: false,
+    },
   },
   { versionKey: false }
 );
@@ -69,7 +78,13 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
-
+//The limited number of login times exceeded
+userSchema.pre('save', function (next) {
+  if (this.logInTimes !== 10) return next();
+  this.bannedForHour = Date.now() + 60 * 60 * 1000;
+  this.logInTimes = undefined;
+  next();
+});
 userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });
   next();
@@ -102,6 +117,10 @@ userSchema.methods.createPasswordResetToken = function () {
     .digest('hex');
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
+};
+userSchema.methods.bannedForHourFun = function () {
+  if (!this.bannedForHour) return false;
+  return this.bannedForHour > Date.now();
 };
 const User = model('User', userSchema);
 

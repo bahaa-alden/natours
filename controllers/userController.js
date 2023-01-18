@@ -21,6 +21,7 @@ export const getAllUsers = catchAsync(async (req, res, next) => {
 
 export const updateMe = catchAsync(async (req, res, next) => {
   //If the user use update me should not send pass cause this route for normal work like update name,email... not auth
+  //and if the front end developer thought this route for update password
   if (req.body.password || req.body.passwordConfirm)
     return next(
       new AppError(
@@ -44,45 +45,4 @@ export const deleteMe = catchAsync(async (req, res, next) => {
     status: 'success',
     data: null,
   });
-});
-
-export const getUser = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
-  if (!user) {
-    //BUG and mongoose don't see it and i have to solve it manually
-    //i use return to end the request and avoid send the next response
-    return next(new AppError(404, 'No user with that ID'));
-  }
-  res.status(200).send({
-    status: 'success',
-    data: {
-      user,
-    },
-  });
-});
-
-export const updateUser = catchAsync(async (req, res, next) => {
-  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  if (!user) {
-    return next(new AppError(404, 'a user not found'));
-  }
-  res.status(200).send({
-    status: 'success',
-    data: {
-      user,
-    },
-  });
-});
-
-//NOTE delete user
-export const deleteUser = catchAsync(async (req, res, next) => {
-  const user = await User.findByIdAndRemove(req.params.id);
-  if (!user) {
-    return next(new AppError(404, 'a user not found'));
-  }
-
-  res.status(204).send({ status: 'success', data: null });
 });

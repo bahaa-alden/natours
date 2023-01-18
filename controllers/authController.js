@@ -5,6 +5,7 @@ import User from '../models/userModel.js';
 import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
 import sendEmail from '../utils/email.js';
+
 // import AppError from '../utils/appError.js';
 
 const signToken = (id) =>
@@ -14,6 +15,19 @@ const signToken = (id) =>
 
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user.id);
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  res.cookie('jwt', token, cookieOptions);
+  //remove password from output
+  user.password = undefined;
+  user.logInTimes = undefined;
+  user.bannedForHour = undefined;
+
   res.status(statusCode).send({
     status: 'success',
     token,
@@ -34,9 +48,27 @@ export const login = catchAsync(async (req, res, next) => {
     return next(new AppError(400, 'Please provide password and email'));
   }
   //check if the user exist and the password correct
-  const user = await User.findOne({ email }).select('+password');
-  if (!user || !(await user.correctPassword(password))) {
-    return next(new AppError(401, 'Incorrect password or email'));
+  const user = await User.findOne({ email })
+    .select('+password')
+    .select('+logInTimes')
+    .select('+bannedForHour');
+
+  if (
+    !user ||
+    !(await user.correctPassword(password)) ||
+    user.bannedForHourFun()
+  ) {
+    if (user && !user.bannedForHourFun()) {
+      user.logInTimes += 1;
+      await user.save({ validateBeforeSave: false });
+    }
+    const message =
+      user && user.bannedForHourFun()
+        ? `Login limited Times exceeded,Try after ${new Date(
+            user.bannedForHour - Date.now()
+          ).getMinutes()} Minutes`
+        : 'Incorrect password or email';
+    return next(new AppError(401, message));
   }
   createSendToken(user, 200, res);
 });

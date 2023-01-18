@@ -1,4 +1,5 @@
 ﻿import { Router } from 'express';
+import csrf from 'csurf';
 import {
   signup,
   login,
@@ -9,13 +10,11 @@ import {
 } from '../controllers/authController.js';
 import {
   getAllUsers,
-  getUser,
-  updateUser,
-  deleteUser,
   updateMe,
   deleteMe,
 } from '../controllers/userController.js';
 
+// const csrfProtection = csrf();
 const router = Router();
 router.route('/signup').post(signup);
 router.route('/login').post(login);
@@ -26,5 +25,5 @@ router.route('/updateMe').patch(protect, updateMe);
 router.route('/deleteMe').delete(protect, deleteMe);
 
 router.route('/').get(getAllUsers);
-router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
+// router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 export default router;
