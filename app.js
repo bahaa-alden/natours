@@ -4,6 +4,7 @@ import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
+import hpp from 'hpp';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import globalErrorHandler from './controllers/errorController.js';
@@ -38,6 +39,20 @@ app.use(mongoSanitize());
 
 //Data sanitization against XSS like send html with some js in any param or...
 app.use(xss());
+
+//Prevent http params pollution
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'difficulty',
+      'ratingsAverage',
+      'ratingsQuantity',
+      'price',
+      'maxGroupSize',
+    ],
+  })
+);
 
 //Serving static files
 app.use(express.static(`./public`));

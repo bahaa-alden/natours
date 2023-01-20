@@ -1,20 +1,18 @@
 ﻿import { config } from 'dotenv';
 import mongoose from 'mongoose';
-import fs from 'fs';
+import tours from './tours.json' assert { type: 'json' };
 import Tour from '../../models/tourModel.js';
 
-config({ path: './../../config.env' });
-
+config();
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
+    useUnifiedTopology: true,
   })
   .then(() => console.log('DB connection successes'));
-
-const tours = JSON.parse(fs.readFileSync(`./tours-simple.json`, 'utf-8'));
 
 const importData = async () => {
   try {

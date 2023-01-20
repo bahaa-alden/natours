@@ -75,6 +75,29 @@ const tourSchema = new Schema(
       default: Date.now(), //default does not have a required
     },
     startDates: [Date],
+    startLocation: {
+      //GeoJson
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        description: String,
+        day: Number,
+      },
+    ],
     secretTour: { type: Boolean, default: false },
   },
   { toJSON: { virtuals: true }, toObject: { virtuals: true } }
