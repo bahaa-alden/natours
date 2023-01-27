@@ -11,6 +11,7 @@ import {
   getAllUsers,
   updateMe,
   deleteMe,
+  getUsers,
 } from '../controllers/userController.js';
 
 const router = Router();
@@ -23,5 +24,6 @@ router.route('/updateMe').patch(protect, updateMe);
 router.route('/deleteMe').delete(protect, deleteMe);
 
 router.route('/').get(getAllUsers);
+router.route('/:id').get(getUsers);
 // router.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);
 export default router;

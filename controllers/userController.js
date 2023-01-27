@@ -11,14 +11,20 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 export const getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
+  const users = await User.find({});
   res.status(200).json({
     status: 'success',
     result: users.length,
     data: users,
   });
 });
-
+export const getUsers = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  res.status(200).json({
+    status: 'success',
+    data: user,
+  });
+});
 export const updateMe = catchAsync(async (req, res, next) => {
   //If the user use update me should not send pass cause this route for normal work like update name,email... not auth
   //and if the front end developer thought this route for update password

@@ -23,7 +23,6 @@ const createSendToken = (user, statusCode, res) => {
   res.cookie('jwt', token, cookieOptions);
   //remove password from output
   user.password = undefined;
-
   res.status(statusCode).send({
     status: 'success',
     token,
@@ -44,11 +43,9 @@ export const login = catchAsync(async (req, res, next) => {
     return next(new AppError(400, 'Please provide password and email'));
   }
   //check if the user exist and the password correct
-  const user = await User.findOne({ email })
-    .select('+password')
-    .select('+logInTimes')
-    .select('+bannedForHour');
-
+  const user = await User.findOne({ email }).select(
+    '+password +logInTimes +bannedForHour'
+  );
   if (
     !user ||
     !(await user.correctPassword(password)) ||
@@ -66,7 +63,7 @@ export const login = catchAsync(async (req, res, next) => {
         : 'Incorrect password or email';
     return next(new AppError(401, message));
   }
-  if (user.logInTimesTimes || user.bannedForHour) {
+  if (user.logInTimes >= 0 || user.bannedForHour) {
     user.logInTimes = undefined;
     user.bannedForHour = undefined;
     await user.save({ validateBeforeSave: false });

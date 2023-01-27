@@ -30,7 +30,8 @@ export const getAllTours = catchAsync(async (req, res, next) => {
 });
 
 export const getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
+  const tour = await Tour.findById(req.params.id).populate('reviews');
+
   if (!tour) {
     //BUG and mongoose don't see it and i have to solve it manually
     //i use return to end the request and avoid send the next response
@@ -53,7 +54,7 @@ export const createTour = catchAsync(async (req, res, next) => {
     },
   });
 });
-//NOTE update user
+//NOTE update tour
 export const updateTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -69,7 +70,7 @@ export const updateTour = catchAsync(async (req, res, next) => {
     },
   });
 });
-//NOTE delete user
+//NOTE delete tour
 export const deleteTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findByIdAndRemove(req.params.id);
   if (!tour) {

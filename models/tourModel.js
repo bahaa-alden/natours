@@ -1,6 +1,5 @@
 ﻿import mongoose from 'mongoose';
 import slugify from 'slugify';
-// import validator from 'validator';
 
 const { Schema, model } = mongoose;
 //Document
@@ -98,9 +97,14 @@ const tourSchema = new Schema(
         day: Number,
       },
     ],
+    //[{type:id,ref:'User}] mean the type of elements inside the array otherwise mean embedded data
+    guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
     secretTour: { type: Boolean, default: false },
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  {
+    toJSON: { virtuals: true, versionKey: false },
+    toObject: { virtuals: true, versionKey: false },
+  }
 );
 //virtual properties do not store at database and
 //we don't add them to schema because it is a business role
@@ -108,17 +112,34 @@ const tourSchema = new Schema(
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
-
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
 //Document Middleware
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true, trim: true });
   next();
 });
 
+//Embedding guides
+// tourSchema.pre('save', async function (next) {
+//   const guides = this.guides.map(async (id) => await User.findById(id));
+//   this.guides = await Promise.all(guides);
+//   next();
+// });
+
 //Query Middleware
 tourSchema.pre(/^find/, function (next) {
   //only the normal tours that have secretTour===false
   this.find({ secretTour: { $ne: true } });
+  next();
+});
+// populate Users
+tourSchema.pre(/^find/, function (next) {
+  //only the normal tours that have secretTour===false
+  this.populate({ path: 'guides', select: '-passwordChangedAt' });
   next();
 });
 

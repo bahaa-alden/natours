@@ -4,9 +4,9 @@ import tours from './tours.json' assert { type: 'json' };
 import Tour from '../../models/tourModel.js';
 
 config();
-const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
+// const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
-  .connect(DB, {
+  .connect(process.env.DATABASE_LOCAL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,

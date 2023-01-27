@@ -21,6 +21,7 @@ const userSchema = new Schema(
     role: {
       type: String,
       enum: ['admin', 'guide', 'lead-guide'],
+      default: 'user',
     },
     password: {
       type: String,
@@ -51,12 +52,12 @@ const userSchema = new Schema(
       default: 0,
       select: false,
     },
-    bannedForHour: {
-      type: Date,
-      select: false,
-    },
+    bannedForHour: { type: Date, select: false },
   },
-  { versionKey: false }
+  {
+    toJSON: { virtuals: true, versionKey: false },
+    toObject: { virtuals: true, versionKey: false },
+  }
 );
 userSchema.pre('save', function (next) {
   //if the password not changed or newUser made end the process
