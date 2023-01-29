@@ -1,15 +1,15 @@
 import { Router } from 'express';
 import {
   createReview,
-  getALlReviews,
+  getAllReviews,
   getReview,
 } from '../controllers/reviewController.js';
 import { protect, restrictTo } from '../controllers/authController.js';
 
-const router = Router();
+const router = Router({ mergeParams: true });
 router
   .route('/')
-  .get(getALlReviews)
+  .get(getAllReviews)
   .post(protect, restrictTo('user'), createReview);
 router.route('/:id').get(getReview);
 
