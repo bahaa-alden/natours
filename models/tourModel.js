@@ -36,10 +36,11 @@ const tourSchema = new Schema(
       default: 4.5,
       min: [1, 'A tour rating must be above 1'],
       max: [5, 'A tour rating must be below 5'],
-    }, //NOTE rating not required because its value came from reviews
+      set: (value) => Math.round(value * 10) / 10,
+    },
     ratingsQuantity: {
       type: Number,
-      default: 0, //NOTE because there is no reviews when the tours new
+      default: 0,
     },
     price: {
       type: Number,
@@ -106,9 +107,10 @@ const tourSchema = new Schema(
     toObject: { virtuals: true, versionKey: false },
   }
 );
-//virtual properties do not store at database and
-//we don't add them to schema because it is a business role
-//and we cant use them in a query
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
+// Virtual because i can get  it from felid in the schema (duration in days)/7=>week
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
@@ -137,19 +139,19 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 // populate Users
-tourSchema.pre(/^find/, function (next) {
+tourSchema.pre(/^find/, async function (next) {
   //only the normal tours that have secretTour===false
   this.populate({ path: 'guides', select: '-passwordChangedAt' });
   next();
 });
 
 //aggregation MiddleWare
-tourSchema.pre('aggregate', function (next) {
-  //use unshift for adding in the start of the pipeline's Array
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  next();
-});
+// tourSchema.pre('aggregate', function (next) {
+//   //use unshift for adding in the start of the pipeline's Array
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   next();
+// });
+
 //Collection
 const Tour = model('Tour', tourSchema);
-
 export default Tour;

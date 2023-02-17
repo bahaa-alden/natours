@@ -1,7 +1,13 @@
 ﻿import Tour from '../models/tourModel.js';
-import APIFeatures from '../utils/apiFeatures.js';
-import AppError from '../utils/appError.js';
 import catchAsync from '../utils/catchAsync.js';
+import AppError from '../utils/appError.js';
+import {
+  createOne,
+  deleteOne,
+  getAll,
+  getOne,
+  updateOne,
+} from './handlerFactory.js';
 
 //NOTE these funcs do not have to worry about any error they just do what they made for it
 export const aliasTopTours = async (req, res, next) => {
@@ -11,74 +17,15 @@ export const aliasTopTours = async (req, res, next) => {
   next();
 };
 
-export const getAllTours = catchAsync(async (req, res, next) => {
-  const feature = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
+export const getAllTours = getAll(Tour);
 
-  const tours = await feature.query;
-  //Send Response
-  res.json({
-    status: 200,
-    result: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
+export const getTour = getOne(Tour, { path: 'reviews' });
 
-export const getTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate('reviews');
+export const createTour = createOne(Tour);
 
-  if (!tour) {
-    //BUG and mongoose don't see it and i have to solve it manually
-    //i use return to end the request and avoid send the next response
-    return next(new AppError(404, 'No tour with that ID'));
-  }
-  res.status(200).send({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
-});
+export const updateTour = updateOne(Tour);
 
-export const createTour = catchAsync(async (req, res, next) => {
-  const newTour = await Tour.create(req.body);
-  res.status(201).send({
-    status: 'success',
-    data: {
-      tour: newTour,
-    },
-  });
-});
-//NOTE update tour
-export const updateTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  if (!tour) {
-    return next(new AppError(404, 'a tour not found'));
-  }
-  res.status(200).send({
-    status: 'success',
-    data: {
-      tour,
-    },
-  });
-});
-//NOTE delete tour
-export const deleteTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndRemove(req.params.id);
-  if (!tour) {
-    return next(new AppError(404, 'a tour not found'));
-  }
-
-  res.status(204).send({ status: 'success', data: null });
-});
+export const deleteTour = deleteOne(Tour);
 
 //NOTE stats
 export const getTourStats = catchAsync(async (req, res, next) => {
@@ -132,4 +79,58 @@ export const getMonthlyPlan = catchAsync(async (req, res, next) => {
       plan,
     },
   });
+});
+
+export const getToursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1; //find the radius comparing with the earth sphere
+  if (!lat || !lng) {
+    return next(
+      new AppError(
+        400,
+        'Please provide latitude and longitude in the format lat,lng'
+      )
+    );
+  }
+  //Find tours whose starting location is 200{distance(radius)} miles {unit} or less from my location{center}
+  //And the geoJson make a circle have a radius and it's center is myLocation(center)and each point in this circle is counted
+  const tours = await Tour.find({
+    startLocation: {
+      $geoWithin: { $centerSphere: [[lng * 1, lat * 1], radius] },
+    },
+  });
+  res
+    .status(200)
+    .json({ status: 'success', result: tours.length, data: { data: tours } });
+});
+
+export const getToursDistances = catchAsync(async (req, res, next) => {
+  const { latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+  const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+  if (!lat || !lng) {
+    return next(
+      new AppError(
+        400,
+        'Please provide latitude and longitude in the format lat,lng'
+      )
+    );
+  }
+  const tours = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: { type: 'Point', coordinates: [lng * 1, lat * 1] },
+        distanceField: 'dist.distance',
+        distanceMultiplier: multiplier,
+        query: { difficulty: 'difficult' },
+        includeLocs: 'dist.location',
+        spherical: true,
+      },
+    },
+    { $project: { name: 1, dist: 1 } },
+  ]);
+  res
+    .status(200)
+    .json({ status: 'success', result: tours.length, data: { data: tours } });
 });

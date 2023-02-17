@@ -13,7 +13,7 @@
     //For find
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(
-      /\b(gt|gte|lt|lte)\b/gi,
+      /\b(gt|gte|lt|lte|ne)\b/gi,
       (match) => `$${match}`
     );
     this.query = this.query.find(JSON.parse(queryStr));

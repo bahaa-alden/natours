@@ -20,7 +20,7 @@ const userSchema = new Schema(
     photo: String,
     role: {
       type: String,
-      enum: ['admin', 'guide', 'lead-guide'],
+      enum: ['admin', 'guide', 'lead-guide', 'user'],
       default: 'user',
     },
     password: {
@@ -49,7 +49,6 @@ const userSchema = new Schema(
     },
     logInTimes: {
       type: Number,
-      default: 0,
       select: false,
     },
     bannedForHour: { type: Date, select: false },

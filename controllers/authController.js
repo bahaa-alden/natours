@@ -52,6 +52,7 @@ export const login = catchAsync(async (req, res, next) => {
     user.bannedForHourFun()
   ) {
     if (user && !user.bannedForHourFun()) {
+      if (!user.logInTimes) user.logInTimes = 0;
       user.logInTimes += 1;
       await user.save({ validateBeforeSave: false });
     }

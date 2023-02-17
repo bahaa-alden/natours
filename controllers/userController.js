@@ -1,6 +1,7 @@
 ﻿import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
+import { deleteOne, getAll, getOne, updateOne } from './handlerFactory.js';
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -10,21 +11,10 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-export const getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find({});
-  res.status(200).json({
-    status: 'success',
-    result: users.length,
-    data: users,
-  });
-});
-export const getUsers = catchAsync(async (req, res, next) => {
-  const user = await User.findById(req.params.id);
-  res.status(200).json({
-    status: 'success',
-    data: user,
-  });
-});
+export const getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
 export const updateMe = catchAsync(async (req, res, next) => {
   //If the user use update me should not send pass cause this route for normal work like update name,email... not auth
   //and if the front end developer thought this route for update password
@@ -52,3 +42,9 @@ export const deleteMe = catchAsync(async (req, res, next) => {
     data: null,
   });
 });
+
+export const getAllUsers = getAll(User);
+export const getUser = getOne(User);
+//Do not update password with this
+export const updateUser = updateOne(User);
+export const deleteUser = deleteOne(User);
