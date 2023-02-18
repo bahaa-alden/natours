@@ -58,7 +58,7 @@ export const login = catchAsync(async (req, res, next) => {
     }
     const message =
       user && user.bannedForHourFun()
-        ? `Login limited Times exceeded,Try after ${new Date(
+        ? `Login limited number of attempts exceeded,Try after ${new Date(
             user.bannedForHour - Date.now()
           ).getMinutes()} Minutes`
         : 'Incorrect password or email';

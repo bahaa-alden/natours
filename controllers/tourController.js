@@ -85,6 +85,7 @@ export const getToursWithin = catchAsync(async (req, res, next) => {
   const { distance, latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
   const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1; //find the radius comparing with the earth sphere
+  //process anything was sent with request except the valueType example : lat,lng
   if (!lat || !lng) {
     return next(
       new AppError(
@@ -123,7 +124,7 @@ export const getToursDistances = catchAsync(async (req, res, next) => {
         near: { type: 'Point', coordinates: [lng * 1, lat * 1] },
         distanceField: 'dist.distance',
         distanceMultiplier: multiplier,
-        query: { difficulty: 'difficult' },
+        // query: { difficulty: 'difficult' },
         includeLocs: 'dist.location',
         spherical: true,
       },

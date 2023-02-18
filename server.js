@@ -13,7 +13,7 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log('DB connection succeeded'))
-  .catch(() => console.log('Mongo connection Error'));
+  .catch(() => console.log('Mongo connection error'));
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () =>
