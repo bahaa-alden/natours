@@ -37,7 +37,7 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.20",
-    "puppeteer": "^19.4.1",
+    "puppeteer": "^19.5.0",
     "slugify": "^1.6.5",
     "util": "^0.12.5",
     "validator": "^13.7.0",
