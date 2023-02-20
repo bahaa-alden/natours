@@ -1,4 +1,6 @@
 ﻿import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import morgan from 'morgan';
 import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
@@ -13,6 +15,13 @@ import AppError from './utils/appError.js';
 
 const app = express();
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+//1) Global middlewares
+//Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 //Set security headers
 app.use(helmet());
 
@@ -55,11 +64,8 @@ app.use(
   })
 );
 
-//Serving static files
-app.use(express.static(`./public`));
-
-//3)Routes
-
+//2)Routes
+app.get('/', (req, res) => res.status(200).render('base'));
 app.use('/api/v1/tours', tourRouter); // for route(URL) /api/v1/tours we use tourRouter (tour middleware in url /api/v1/tours)
 app.use('/api/v1/users', userRouter); //it means for route(URL) /api/v1/users we use userRouter
 app.use('/api/v1/reviews', reviewRouter);
@@ -72,5 +78,4 @@ app.all('*', (req, res, next) => {
 
 app.use(globalErrorHandler);
 //and the other middleware like morgan used in the  all routes
-
 export default app;

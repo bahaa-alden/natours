@@ -5,6 +5,7 @@
     "dotenv",
     "dsphere",
     "errmsg",
+    "middlewares",
     "natours",
     "Schmedtmann",
     "virtuals"
