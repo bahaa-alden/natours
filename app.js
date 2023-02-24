@@ -10,6 +10,7 @@ import hpp from 'hpp';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
+import viewRouter from './routes/viewRoutes.js';
 import globalErrorHandler from './controllers/errorController.js';
 import AppError from './utils/appError.js';
 
@@ -65,7 +66,8 @@ app.use(
 );
 
 //2)Routes
-app.get('/', (req, res) => res.status(200).render('base'));
+
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter); // for route(URL) /api/v1/tours we use tourRouter (tour middleware in url /api/v1/tours)
 app.use('/api/v1/users', userRouter); //it means for route(URL) /api/v1/users we use userRouter
 app.use('/api/v1/reviews', reviewRouter);
