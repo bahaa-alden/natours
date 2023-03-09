@@ -7,7 +7,8 @@ import Tour from '../../models/tourModel.js';
 import User from '../../models/userModel.js';
 import Review from '../../models/reviewModel.js';
 
-config();
+config({ path: '../../.env' });
+
 // const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
   .connect(process.env.DATABASE_LOCAL, {

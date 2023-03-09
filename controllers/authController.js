@@ -58,7 +58,7 @@ export const login = catchAsync(async (req, res, next) => {
     }
     const message =
       user && user.bannedForHourFun()
-        ? `Login limited number of attempts exceeded,Try after ${new Date(
+        ? `The limited number of login attempts has been exceeded,Try again after ${new Date(
             user.bannedForHour - Date.now()
           ).getMinutes()} Minutes`
         : 'Incorrect password or email';
@@ -72,6 +72,14 @@ export const login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+export const logout = async (req, res, next) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
+};
+
 export const protect = catchAsync(async (req, res, next) => {
   // Getting a token and check of it's there
   let token;
@@ -80,6 +88,8 @@ export const protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
   //1) If the token not exist either the authorization found or not
   if (!token) {
@@ -112,6 +122,33 @@ export const protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
+export const isLoggedIn = async (req, res, next) => {
+  // Getting a token and check of it's there
+  try {
+    if (!req.cookies.jwt) return next();
+    //2) Verification token
+    //use promisify because we are in async func and for await until the verification to be completed to return the result
+    const decode = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    //3) Check if the user of this jwt still exist
+    const currentUser = await User.findById(decode.id);
+    if (!currentUser) {
+      return next();
+    }
+    //4) Check if the user changed the password
+    if (currentUser.isPasswordChanged(decode.iat)) {
+      return next();
+    }
+    res.locals.user = currentUser;
+    next();
+  } catch (err) {
+    return next();
+  }
+};
 
 //for permission
 export const restrictTo =
@@ -189,7 +226,7 @@ export const resetPassword = catchAsync(async (req, res, next) => {
 });
 
 //update logged user password
-export const updatePassword = catchAsync(async (req, res, next) => {
+export const updateMyPassword = catchAsync(async (req, res, next) => {
   const { passwordCurrent, password, passwordConfirm } = req.body;
   // 1) get the logged in user
   const user = await User.findById(req.user.id).select('+password');

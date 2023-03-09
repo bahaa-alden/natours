@@ -5,7 +5,9 @@ import morgan from 'morgan';
 import { rateLimit } from 'express-rate-limit';
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
+import cookieParser from 'cookie-parser';
 import xss from 'xss-clean';
+import cors from 'cors';
 import hpp from 'hpp';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
@@ -17,15 +19,51 @@ import AppError from './utils/appError.js';
 const app = express();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+//PUG
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 //1) Global middlewares
+//cors
+app.use(cors());
+
 //Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
-//Set security headers
-app.use(helmet());
 
+//Set security headers
+const scriptSrcUrls = [
+  'https://api.tiles.mapbox.com/',
+  'https://api.mapbox.com/',
+  'https://cdnjs.cloudflare.com/',
+];
+const styleSrcUrls = [
+  'https://api.mapbox.com/',
+  'https://api.tiles.mapbox.com/',
+  'https://fonts.googleapis.com/',
+];
+const connectSrcUrls = [
+  'https://api.mapbox.com/',
+  'https://a.tiles.mapbox.com/',
+  'https://b.tiles.mapbox.com/',
+  'https://events.mapbox.com/',
+];
+const fontSrcUrls = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: [],
+      connectSrc: ["'self'", ...connectSrcUrls],
+      scriptSrc: ["'self'", ...scriptSrcUrls],
+      styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+      workerSrc: ["'self'", 'blob:'],
+      objectSrc: [],
+      imgSrc: ["'self'", 'blob:', 'data:'],
+      fontSrc: ["'self'", ...fontSrcUrls],
+    },
+  })
+);
 //for logging in development
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -44,6 +82,8 @@ app.use('/api', limiter);
 
 //Read the data from the body
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 //Data sanitization against NoSql query injection like email:{$gt:""}
 app.use(mongoSanitize());
@@ -64,6 +104,11 @@ app.use(
     ],
   })
 );
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
 
 //2)Routes
 

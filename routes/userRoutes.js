@@ -5,8 +5,9 @@ import {
   forgotPassword,
   resetPassword,
   protect,
-  updatePassword,
+  updateMyPassword,
   restrictTo,
+  logout,
 } from '../controllers/authController.js';
 import {
   getAllUsers,
@@ -21,14 +22,15 @@ import {
 const router = Router();
 router.route('/signup').post(signup);
 router.route('/login').post(login);
+router.route('/logout').post(logout);
 router.route('/forgotPassword').post(forgotPassword);
 router.route('/resetPassword/:token').patch(resetPassword);
 
 //Protect all routes after this middleware
 router.use(protect);
 
-router.route('/updateMyPassword').patch(updatePassword);
 router.route('/me').get(getMe, getUser);
+router.route('/updateMyPassword').patch(updateMyPassword);
 router.route('/updateMe').patch(updateMe);
 router.route('/deleteMe').delete(deleteMe);
 
