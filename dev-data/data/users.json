@@ -1,232 +1,202 @@
-[{
-  "_id": {
-    "$oid": "5c8a1d5b0190b214360dc057"
+[
+  {
+    "photo": "user-1.jpg",
+    "role": "admin",
+    "active": true,
+    "name": "Jonas Schmedtmann",
+    "email": "admin@natours.io",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-1.jpg",
-  "role": "admin",
-  "active": true,
-  "name": "Jonas Schmedtmann",
-  "email": "admin@natours.io",
-  "password": "$2a$12$aTCbbHdUd.kbrh5wJNoU9uTe32q.lHsrV2b/qh6wMBBHKq7/wnhva",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a1dfa2f8fb814b56fa181"
+  {
+    "photo": "user-2.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Lourdes Browning",
+    "email": "loulou@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-2.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Lourdes Browning",
-  "email": "loulou@example.com",
-  "password": "$2a$12$bavPQrOPAEDYTcqebv6ED..kUJG6Ld4yNwiJNoM3meyj.z2qOJMKS",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a1e1a2f8fb814b56fa182"
+  {
+    "photo": "user-3.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Sophie Louise Hart",
+    "email": "sophie@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-3.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Sophie Louise Hart",
-  "email": "sophie@example.com",
-  "password": "$2a$12$zzUaOc63vMle5kqYbkBZTe406GgAMZmur4jwX3oWgSCDc73E2HGG2",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a1ec62f8fb814b56fa183"
+  {
+    "photo": "user-4.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Ayla Cornell",
+    "email": "ayls@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-4.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Ayla Cornell",
-  "email": "ayls@example.com",
-  "password": "$2a$12$IHHjGslresJgUARcrfcM8.JBl48F5f6.UX4M8aFRA5huRyCehINJi",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a1f292f8fb814b56fa184"
+  {
+    "photo": "user-5.jpg",
+    "role": "guide",
+    "active": true,
+    "name": "Leo Gillespie",
+    "email": "leo@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-5.jpg",
-  "role": "guide",
-  "active": true,
-  "name": "Leo Gillespie",
-  "email": "leo@example.com",
-  "password": "$2a$12$4ALhMKAl2JMrSlt.MGxUMeM4DEHCB2LiU2O9HVhc6pvE.Ga1iRvNi",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a1f4e2f8fb814b56fa185"
+  {
+    "photo": "user-6.jpg",
+    "role": "guide",
+    "active": true,
+    "name": "Jennifer Hardy",
+    "email": "jennifer@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-6.jpg",
-  "role": "guide",
-  "active": true,
-  "name": "Jennifer Hardy",
-  "email": "jennifer@example.com",
-  "password": "$2a$12$RC8eg4KEr4hcrqjKznwIZeVWAK.39bNkCg5IPkexfPUOdD8xFZhrG",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a21d02f8fb814b56fa189"
+  {
+    "photo": "user-10.jpg",
+    "role": "lead-guide",
+    "active": true,
+    "name": "Steve T. Scaife",
+    "email": "steve@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-10.jpg",
-  "role": "lead-guide",
-  "active": true,
-  "name": "Steve T. Scaife",
-  "email": "steve@example.com",
-  "password": "$2a$12$d6qxnxNwe51NJf76w4mJ1OteOciSh8ySTOb9XKYyrrIOWRH7plrnm",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a21f22f8fb814b56fa18a"
+  {
+    "photo": "user-11.jpg",
+    "role": "lead-guide",
+    "active": true,
+    "name": "Aarav Lynn",
+    "email": "aarav@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-11.jpg",
-  "role": "lead-guide",
-  "active": true,
-  "name": "Aarav Lynn",
-  "email": "aarav@example.com",
-  "password": "$2a$12$uzMdjNntsA5k/O2EjIUsCe0job9x2Q7y/aUyowx3h0upzSf0ri3VC",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a22c62f8fb814b56fa18b"
+  {
+    "photo": "user-12.jpg",
+    "role": "lead-guide",
+    "active": true,
+    "name": "Miyah Myles",
+    "email": "miyah@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-12.jpg",
-  "role": "lead-guide",
-  "active": true,
-  "name": "Miyah Myles",
-  "email": "miyah@example.com",
-  "password": "$2a$12$x.XBAgbcTXYCTC0Z339jjO2fJEGLlZL9cJetuR1jB8LYN6ScFmUS2",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a23412f8fb814b56fa18c"
+  {
+    "photo": "user-13.jpg",
+    "role": "guide",
+    "active": true,
+    "name": "Ben Hadley",
+    "email": "ben@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-13.jpg",
-  "role": "guide",
-  "active": true,
-  "name": "Ben Hadley",
-  "email": "ben@example.com",
-  "password": "$2a$12$nveA9WE0.7Gt.k7dBVgas.NPFPlKuH9q3UVqdpXDkla3sHUsYqGqS",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a23c82f8fb814b56fa18d"
+  {
+    "photo": "user-14.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Laura Wilson",
+    "email": "laura@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-14.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Laura Wilson",
-  "email": "laura@example.com",
-  "password": "$2a$12$xMk/b4uzFhtOIjbUu8Ful.WMI0alkLAbKfs0JLIThnxGWTGm11hA6",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a23de2f8fb814b56fa18e"
+  {
+    "photo": "user-15.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Max Smith",
+    "email": "max@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-15.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Max Smith",
-  "email": "max@example.com",
-  "password": "$2a$12$iY6OxC6..VnkMQ9RqMYpJul.wIzh1AagHHXN9biDs9nigyna7h4cG",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a24282f8fb814b56fa18f"
+  {
+    "photo": "user-16.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Isabel Kirkland",
+    "email": "isabel@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-16.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Isabel Kirkland",
-  "email": "isabel@example.com",
-  "password": "$2a$12$Jah4hDHuK07UAuaHXL8pB.EbbGmyuQlitcIT5T5Q3KleQ2jSA4bkC",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a24402f8fb814b56fa190"
+  {
+    "photo": "user-17.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Alexander Jones",
+    "email": "alex@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-17.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Alexander Jones",
-  "email": "alex@example.com",
-  "password": "$2a$12$FCnG9LAhfQVaoOoFsOBFceuEG4d1Af77riwwBNHIkDLuYrT1GOpiS",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a245f2f8fb814b56fa191"
+  {
+    "photo": "user-18.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Eduardo Hernandez",
+    "email": "edu@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-18.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Eduardo Hernandez",
-  "email": "edu@example.com",
-  "password": "$2a$12$3a3IFmgNYlqMnZjTHY3n6O6Ag5b5svu0iQYWFV0B9Wf3aD0edIyEy",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a24822f8fb814b56fa192"
+  {
+    "photo": "user-19.jpg",
+    "role": "user",
+    "active": true,
+    "name": "John Riley",
+    "email": "john@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-19.jpg",
-  "role": "user",
-  "active": true,
-  "name": "John Riley",
-  "email": "john@example.com",
-  "password": "$2a$12$aFegEHWdpU5Saf4UcUy8B.fzrtiY5ldByAYAAE5zBn4.NSvtMUyVa",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a24a02f8fb814b56fa193"
+  {
+    "photo": "user-20.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Lisa Brown",
+    "email": "lisa@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-20.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Lisa Brown",
-  "email": "lisa@example.com",
-  "password": "$2a$12$FLqPk3gr8T/xZMsBxtG9vOmuzpWWMP8o3DBUuOh1qfg3u1BW6Z6Vq",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "640786d1b7aae07f648c4b61"
+  {
+    "photo": "user-7.jpg",
+    "role": "guide",
+    "active": true,
+    "name": "Kate Morrison",
+    "email": "kate@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "bahaa.jpg",
-  "role": "user",
-  "active": true,
-  "name": "bahaa abdo",
-  "email": "bahaa@example.com",
-  "password": "$2a$12$/cF4DvxJECds68m530R76uJ3C.d5ZW27BxqkXEe.S6/Lq3/of3XQG",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a201e2f8fb814b56fa186"
+  {
+    "photo": "user-8.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Eliana Stout",
+    "email": "eliana@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
   },
-  "photo": "user-7.jpg",
-  "role": "guide",
-  "active": true,
-  "name": "Kate Morrison",
-  "email": "kate@example.com",
-  "password": "$2a$12$ViMuhivciNXDIpCAx8n19.74ZCxuOWWP.DkAGhp8CqfBB5GV/2PdK",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a20d32f8fb814b56fa187"
-  },
-  "photo": "user-8.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Eliana Stout",
-  "email": "eliana@example.com",
-  "password": "$2a$12$/gfug1ddE9OowaH/yne07.1Bul/Y5.35PrED7nnyDpwlK6BA4oRHa",
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "5c8a211f2f8fb814b56fa188"
-  },
-  "photo": "user-9.jpg",
-  "role": "user",
-  "active": true,
-  "name": "Cristian Vega",
-  "email": "chris@example.com",
-  "password": "$2a$12$YohHkxc3YyCRvFrjrxhFcOoBpcwCTHB0RVdXDUaRvIr1SUjpYrKxy",
-  "__v": 0
-}]
+  {
+    "photo": "user-9.jpg",
+    "role": "user",
+    "active": true,
+    "name": "Cristian Vega",
+    "email": "chris@example.com",
+    "password": "test1234",
+    "passwordConfirm": "test1234",
+    "__v": 0
+  }
+]

@@ -2,9 +2,9 @@
 import './utils/unCaughtException.js';
 import app from './app.js';
 
-// const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
+const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
-  .connect(process.env.DATABASE_LOCAL, {
+  .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
