@@ -105,7 +105,7 @@ export const protect = catchAsync(async (req, res, next) => {
   }
   //2) Verification token
   //use promisify because we are in async func and for await until the verification to be completed to return the result
-  const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  const decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET_KEY);
 
   //3) Check if the user of this jwt still exist
   const currentUser = await User.findById(decode.id);
@@ -137,7 +137,7 @@ export const isLoggedIn = async (req, res, next) => {
     //use promisify because we are in async func and for await until the verification to be completed to return the result
     const decode = await promisify(jwt.verify)(
       req.cookies.jwt,
-      process.env.JWT_SECRET
+      process.env.JWT_SECRET_KEY
     );
 
     //3) Check if the user of this jwt still exist
