@@ -6,7 +6,7 @@ export const addReview = async (body) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:3000/api/v1/reviews/',
+      url: '/api/v1/reviews/',
       data: body,
     });
     if (res.data.status === 'success') {
@@ -33,7 +33,7 @@ export const deleteReview = async (id) => {
   try {
     const res = await axios({
       method: 'DELETE',
-      url: `http://127.0.0.1:3000/api/v1/reviews/${id}`,
+      url: `/api/v1/reviews/${id}`,
       data: {},
     });
     if (res.status === 204) {
@@ -57,7 +57,7 @@ export const updateReview = async (review, rating, id) => {
   try {
     const res = await axios({
       method: 'PATCH',
-      url: `http://127.0.0.1:3000/api/v1/reviews/${id}`,
+      url: `/api/v1/reviews/${id}`,
       data: { review, rating },
     });
     if (res.data.status === 'success') {

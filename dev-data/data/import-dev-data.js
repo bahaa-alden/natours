@@ -7,8 +7,7 @@ import Tour from '../../models/tourModel.js';
 import User from '../../models/userModel.js';
 import Review from '../../models/reviewModel.js';
 
-config({ path: '../../.env' });
-
+config();
 // const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
 mongoose
   .connect(process.env.DATABASE_LOCAL, {
@@ -22,7 +21,7 @@ mongoose
 const importData = async () => {
   try {
     await Tour.create(tours);
-    await User.create(users, { validateBeforeSave: false });
+    await User.create(users);
     await Review.create(reviews);
     console.log('imported');
   } catch (err) {

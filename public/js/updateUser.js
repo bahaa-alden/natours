@@ -3,46 +3,22 @@
 import axios from 'axios';
 import { cuteToast } from './cute/cute-alert';
 
-export const updateUserData = async (body) => {
+export const updateSettings = async (data, type) => {
   try {
+    const url =
+      type === 'data'
+        ? '/api/v1/users/updateMe'
+        : '/api/v1/users/updateMyPassword';
     const res = await axios({
       method: 'PATCH',
-      url: 'http://127.0.0.1:3000/api/v1/users/updateMe',
-      data: body,
+      url: url,
+      data: data,
     });
     if (res.data.status === 'success') {
       cuteToast({
         type: 'success',
         title: 'Success',
-        message: 'Your data has been updated',
-        timer: 2000,
-      }).then(() => {
-        location.reload(true);
-      });
-    }
-  } catch (err) {
-    console.log(err);
-    cuteToast({
-      type: 'error',
-      title: 'Error',
-      message: err.response.data.message,
-      timer: 2500,
-    });
-  }
-};
-
-export const updateUserPassword = async (body) => {
-  try {
-    const res = await axios({
-      method: 'PATCH',
-      url: 'http://127.0.0.1:3000/api/v1/users/updateMyPassword',
-      data: body,
-    });
-    if (res.data.status === 'success') {
-      cuteToast({
-        type: 'success',
-        title: 'Success',
-        message: 'Your password has been updated',
+        message: `Your ${type} has been updated`,
         timer: 2000,
       }).then(() => {
         location.reload(true);

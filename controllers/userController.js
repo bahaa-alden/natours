@@ -1,8 +1,43 @@
-﻿import User from '../models/userModel.js';
+﻿import multer from 'multer';
+import sharp from 'sharp';
+import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
 import { deleteOne, getAll, getOne, updateOne } from './handlerFactory.js';
 
+const multerStorage = multer.memoryStorage();
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/img/users');
+//   },
+//   filename: (req, file, cb) => {
+//     const ext = file.mimetype.split('/')[1];
+//     const fileName = `user-${req.user.id}-${Date.now()}.${ext}`;
+//     cb(null, fileName);
+//   },
+// });
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) cb(null, true);
+  else cb(new AppError(400, 'Not an image! Please upload only images.'), false);
+};
+
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
+
+export const uploadUserPhoto = upload.single('photo');
+
+export const resizeUserImage = catchAsync(async (req, res, next) => {
+  if (!req.file) return next();
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpg`;
+
+  await sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+
+  next();
+});
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
   Object.keys(obj).forEach((el) => {
@@ -26,6 +61,7 @@ export const updateMe = catchAsync(async (req, res, next) => {
       )
     );
   const filteredBody = filterObj(req.body, 'name', 'email');
+  if (req.file) filteredBody.photo = req.file.filename;
   const user = await User.findByIdAndUpdate(
     req.user.id,
     filteredBody,

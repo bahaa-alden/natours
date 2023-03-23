@@ -9,16 +9,18 @@ import cookieParser from 'cookie-parser';
 import xss from 'xss-clean';
 import cors from 'cors';
 import hpp from 'hpp';
+import compression from 'compression';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
 import viewRouter from './routes/viewRoutes.js';
+import bookingRouter from './routes/bookingRoutes.js';
 import globalErrorHandler from './controllers/errorController.js';
 import AppError from './utils/appError.js';
 
 const app = express();
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+export const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 //PUG
 app.set('view engine', 'pug');
@@ -105,6 +107,8 @@ app.use(
   })
 );
 
+app.use(compression());
+
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
@@ -116,6 +120,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter); // for route(URL) /api/v1/tours we use tourRouter (tour middleware in url /api/v1/tours)
 app.use('/api/v1/users', userRouter); //it means for route(URL) /api/v1/users we use userRouter
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 //for other routes
 app.all('*', (req, res, next) => {

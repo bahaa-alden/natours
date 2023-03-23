@@ -1,4 +1,6 @@
-﻿import Tour from '../models/tourModel.js';
+﻿import multer from 'multer';
+import sharp from 'sharp';
+import Tour from '../models/tourModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
 import {
@@ -9,7 +11,44 @@ import {
   updateOne,
 } from './handlerFactory.js';
 
-//NOTE these funcs do not have to worry about any error they just do what they made for it
+const multerStorage = multer.memoryStorage();
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) cb(null, true);
+  else cb(new AppError(400, 'Not an image! Please upload only images.'), false);
+};
+
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
+
+export const uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+]);
+export const resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) return next();
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpg`;
+
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.imageCover}`);
+  req.body.images = [];
+
+  //we are using map to make the data inside the promise.all an array of promises because forEach does not
+  await Promise.all(
+    req.files.images.map(async (e, i) => {
+      req.body.images.push(`tour-${req.params.id}-${Date.now()}-${i + 1}.jpg`);
+      await sharp(e.buffer)
+        .resize(2000, 1333)
+        .toFormat('jpg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/tours/${req.body.images[i]}`);
+    })
+  );
+  next();
+});
+
+//NOTE these funcs do not have to worry about any error cause they just do what they made for it
 export const aliasTopTours = async (req, res, next) => {
   req.query.limit = 5;
   req.query.sort = '-ratingsAverage,price';

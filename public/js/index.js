@@ -1,9 +1,10 @@
 /* eslint-disable */
 import '@babel/polyfill';
-import { login, logout, signup } from './login';
+import { forgotPassword, login, logout, resetPassword, signup } from './login';
 import { displayMap } from './mapbox';
 import { addReview, deleteReview, updateReview, colorStars } from './review.js';
-import { updateUserData, updateUserPassword } from './updateUser';
+import { bookTour } from './stripe';
+import { updateSettings } from './updateUser';
 
 //DOM Elements
 const mapBox = document.getElementById('map');
@@ -17,6 +18,9 @@ const reviewsOption = document.querySelector('.reviews__options');
 const reviewMore = document.querySelector('.reviews__more');
 const reviewEdit = document.querySelector('.reviews__edit');
 const reviewEditForm = document.querySelector('.reviews__edit__form');
+const forgotPasswordForm = document.querySelector('.form-forget');
+const resetPasswordForm = document.querySelector('.form-reset');
+const bookBtn = document.getElementById('book-tour');
 let reviewCard = '';
 let reviewText = '';
 let reviewStars = '';
@@ -48,6 +52,7 @@ if (signupForm) {
     const email = data.get('email');
     const password = data.get('password');
     const passwordConfirm = data.get('passwordConfirm');
+    const photo = new FormData();
     signup({ name, email, password, passwordConfirm });
   });
 }
@@ -55,34 +60,35 @@ if (signupForm) {
 if (updateUserDataFrom) {
   updateUserDataFrom.addEventListener('submit', (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const name = data.get('name');
-    const email = data.get('email');
-    updateUserData({ name, email });
+    const formData = new FormData(e.currentTarget);
+    updateSettings(formData, 'data');
   });
 }
 
 if (updateUserPasswordForm) {
-  updateUserPasswordForm.addEventListener('submit', (e) => {
+  updateUserPasswordForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const password = data.get('password');
     const passwordConfirm = data.get('passwordConfirm');
     const passwordCurrent = data.get('passwordCurrent');
-    updateUserPassword({ password, passwordConfirm, passwordCurrent });
+    await updateSettings(
+      { password, passwordConfirm, passwordCurrent },
+      'password'
+    );
   });
 }
 
 if (reviewForm) {
-  const star = reviewForm.querySelectorAll('.star');
-  colorStars(star);
+  const stars = reviewForm.querySelectorAll('.star');
+  colorStars(stars);
   reviewForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const save = reviewForm.querySelector('.save');
     const review = reviewForm.querySelector('#review-input').value;
     const tour = document.querySelector('.tour-id').getAttribute('data-id');
     let rating = 0;
-    star.forEach((e) => {
+    stars.forEach((e) => {
       if (e.classList.contains('star--active')) rating++;
     });
     save.textContent = 'Posting...';
@@ -126,13 +132,17 @@ if (reviewsOption) {
 if (reviewEditForm) {
   const cancel = reviewEditForm.querySelector('.cancel');
   const update = reviewEditForm.querySelector('.update');
-  const star = reviewEditForm.querySelectorAll('.star');
-  colorStars(star);
+  const stars = reviewEditForm.querySelectorAll('.star');
+
+  cancel.addEventListener('click', () => reviewEdit.classList.remove('active'));
+
+  //make the form's stars enable
+  colorStars(stars);
   reviewEditForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const review = reviewEditForm.querySelector('#review-input').value;
     let rating = 0;
-    star.forEach((e) => {
+    stars.forEach((e) => {
       if (e.classList.contains('star--active')) rating++;
     });
     update.textContent = 'Updating...';
@@ -143,17 +153,43 @@ if (reviewEditForm) {
     for (let index = 0; index < rating; index++) {
       reviewStars[index].classList.remove('reviews__star--inactive');
       reviewStars[index].classList.add('reviews__star--active');
-      console.log('ss');
     }
     for (let index = rating; index < 5; index++) {
       reviewStars[index].classList.remove('reviews__star--active');
       reviewStars[index].classList.add('reviews__star--inactive');
     }
-    //enable cancel button
-    cancel.addEventListener('click', () =>
-      reviewEdit.classList.remove('active')
-    );
+    //hide update form
     reviewEdit.classList.remove('active');
     update.textContent = 'Update';
+  });
+}
+
+if (forgotPasswordForm) {
+  forgotPasswordForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const email = data.get('email');
+
+    await forgotPassword({ email });
+  });
+}
+
+if (resetPasswordForm) {
+  resetPasswordForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const resetToken = data.get('resetToken');
+    const password = data.get('password');
+    const passwordConfirm = data.get('passwordConfirm');
+    resetPassword(password, passwordConfirm, resetToken);
+  });
+}
+
+if (bookBtn) {
+  bookBtn.addEventListener('click', async (e) => {
+    const { tourId } = e.target.dataset;
+    e.target.textContent = 'Processing...';
+    await bookTour(tourId);
+    e.target.textContent = 'Book tour now!';
   });
 }
