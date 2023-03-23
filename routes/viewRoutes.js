@@ -14,10 +14,12 @@ import {
 
 const router = Router();
 
-router.use(isLoggedIn);
 router.get('/health', async (req, res, next) => {
   res.status(200).send({ status: 'success' });
 });
+
+router.use(isLoggedIn);
+
 router.get('/', createBookingCheckout, getOverview);
 
 router.get('/tour/:slug', getTour);
