@@ -7,7 +7,7 @@ import catchAsync from '../utils/catchAsync.js';
 import Email from '../utils/email.js';
 
 const signToken = (id) =>
-  jwt.sign({ id }, process.env.JWT_SECRET, {
+  jwt.sign({ id }, process.env.JWT_SECRET_KEY, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
