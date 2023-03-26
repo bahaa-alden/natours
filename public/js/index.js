@@ -1,9 +1,9 @@
 /* eslint-disable */
 import '@babel/polyfill';
-import { cuteAlert } from './cute/cute-alert';
+import { cuteToast } from './cute/cute-alert';
 import { forgotPassword, login, logout, resetPassword, signup } from './login';
 import { displayMap } from './mapbox';
-import { addReview, deleteReview, updateReview, colorStars } from './review.js';
+import { addReview, deleteReview, updateReview, colorStars } from './review';
 import { bookTour } from './stripe';
 import { updateSettings } from './updateUser';
 
@@ -197,5 +197,10 @@ if (bookBtn) {
 
 const alert = document.body.dataset.alert;
 if (alert) {
-  cuteAlert({ type: 'success', title: 'successful booking', message: alert });
+  cuteToast({
+    type: 'success',
+    title: 'successful booking',
+    message: alert,
+    timer: 7000,
+  });
 }
