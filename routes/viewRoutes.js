@@ -9,9 +9,12 @@ import {
   getForgotPasswordForm,
   getResetPasswordForm,
   getMyBookings,
+  alerts,
 } from '../controllers/viewController.js';
 
 const router = Router();
+
+router.use(alerts);
 
 router.get('/health', async (req, res, next) => {
   res.status(200).send({ status: 'success' });
@@ -33,6 +36,6 @@ router.get('/resetPassword/:token', getResetPasswordForm);
 
 router.get('/me', protect, getMe);
 
-router.get('/myBookings', protect, getMyBookings);
+router.get('/my-tours', protect, getMyBookings);
 
 export default router;

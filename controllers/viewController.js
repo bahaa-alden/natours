@@ -69,3 +69,11 @@ export const getMyBookings = catchAsync(async (req, res, next) => {
   const tours = await Tour.find({ _id: { $in: tourIds } });
   res.status(200).render('overview', { title: 'My tours', tours });
 });
+
+export const alerts = (req, res, next) => {
+  const { alert } = req.query;
+  if (alert === 'booking')
+    req.locals.alert =
+      "Your booking was successful! Please check your email for a confirmation. If your booking does't show up here immediately, please come back later.";
+  next();
+};

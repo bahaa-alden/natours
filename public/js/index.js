@@ -1,5 +1,6 @@
 /* eslint-disable */
 import '@babel/polyfill';
+import { cuteAlert } from './cute/cute-alert';
 import { forgotPassword, login, logout, resetPassword, signup } from './login';
 import { displayMap } from './mapbox';
 import { addReview, deleteReview, updateReview, colorStars } from './review.js';
@@ -192,4 +193,9 @@ if (bookBtn) {
     await bookTour(tourId);
     e.target.textContent = 'Book tour now!';
   });
+}
+
+const alert = document.body.dataset.alert;
+if (alert) {
+  cuteAlert({ type: 'success', title: 'successful booking', message: alert });
 }
