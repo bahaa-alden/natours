@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { isLoggedIn, protect } from '../controllers/authController.js';
-import { createBookingCheckout } from '../controllers/bookingController.js';
 import {
   getOverview,
   getTour,
@@ -20,7 +19,7 @@ router.get('/health', async (req, res, next) => {
 
 router.use(isLoggedIn);
 
-router.get('/', createBookingCheckout, getOverview);
+router.get('/', getOverview);
 
 router.get('/tour/:slug', getTour);
 

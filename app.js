@@ -10,6 +10,7 @@ import xss from 'xss-clean';
 import cors from 'cors';
 import hpp from 'hpp';
 import compression from 'compression';
+// import csurf from 'csurf';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
@@ -17,10 +18,12 @@ import viewRouter from './routes/viewRoutes.js';
 import bookingRouter from './routes/bookingRoutes.js';
 import globalErrorHandler from './controllers/errorController.js';
 import AppError from './utils/appError.js';
+import { webhookCheckout } from './controllers/bookingController.js';
 
 const app = express();
 
 export const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// const csrfProtection = csurf({ cookie: true });
 
 //PUG
 app.set('view engine', 'pug');
@@ -84,10 +87,17 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
+//stripe webhook
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  webhookCheckout
+);
 //Read the data from the body
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// app.use(csrfProtection);
 
 //Data sanitization against NoSql query injection like email:{$gt:""}
 app.use(mongoSanitize());
