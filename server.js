@@ -2,7 +2,10 @@
 import './utils/unCaughtException.js';
 import app from './app.js';
 
-const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD);
+const DB =
+  process.env.NODE_ENV === 'production'
+    ? process.env.DATABASE.replace('<PASSWORD>', process.env.PASSWORD)
+    : process.env.DB;
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
