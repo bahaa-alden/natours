@@ -15,7 +15,7 @@ const router = express.Router({ mergeParams: true });
 
 router.use(protect);
 
-router.get('/checkout-session/:tourId', getCheckoutSession);
+router.get(restrictTo('user'), '/checkout-session/:tourId', getCheckoutSession);
 
 router.get('/myBookings', getMyBookings);
 
