@@ -44,7 +44,13 @@ router.route('/distances/:latlng/unit/:unit').get(getToursDistances);
 router
   .route('/')
   .get(getAllTours)
-  .post(protect, restrictTo('admin', 'lead-guide'), createTour);
+  .post(
+    protect,
+    restrictTo('admin', 'lead-guide'),
+    uploadTourImages,
+    resizeTourImages,
+    createTour
+  );
 
 router
   .route('/:id')

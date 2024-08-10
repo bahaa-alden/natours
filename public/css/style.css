@@ -690,8 +690,13 @@ body {
   fill: #55c57a;
 }
 .reviews__star--inactive,
+.reviews__more--inactive,
 .reviews__more--inactive {
   fill: #bbb;
+}
+
+.tours__more--inactive {
+  fill: #fff;
 }
 
 .section-cta {
@@ -1374,21 +1379,28 @@ body {
   background-image: linear-gradient(to right, black, #a3a3a3);
 }
 
-.reviews__more--btn {
+.reviews__more--btn,
+.tours__more--btn {
   position: absolute;
   top: 40px;
   right: 6px;
   z-index: 4;
 }
-.reviews__more {
+
+.reviews__more,
+.tours__more {
   display: block;
   width: 36px;
   height: 32px;
 }
-.reviews__more--btn:hover {
+
+.reviews__more--btn:hover,
+.tours__more--btn:hover {
   cursor: pointer;
 }
-.reviews__options {
+
+.reviews__options,
+.tours__options {
   font-size: 18px;
   right: 20px;
   position: absolute;
@@ -1400,21 +1412,28 @@ body {
   background: #f4f4f4;
   pointer-events: none;
 }
-.reviews__options.active {
+
+.reviews__options.active,
+.tours__options.active {
   opacity: 1;
   z-index: 1000;
   cursor: pointer;
   pointer-events: all;
 }
+
 .reviews__edit--btn:hover,
-.reviews__delete--btn:hover {
+.reviews__delete--btn:hover,
+.tours__delete--btn:hover {
   transition: all 0.2s linear;
   background: #dedede;
 }
+
 .reviews__edit--btn,
-.reviews__delete--btn {
+.reviews__delete--btn,
+.tours__delete--btn {
   padding: 5px 9px;
 }
+
 .reviews__edit {
   position: absolute;
   top: 0;
@@ -1426,15 +1445,18 @@ body {
   background: gray;
   pointer-events: none;
 }
+
 .reviews__edit {
   transition: all 0.3s linear;
 }
+
 .reviews__edit.active {
   z-index: 111;
   opacity: 1;
   pointer-events: all;
   transition: all 0.3s linear;
 }
+
 .reviews__edit__form {
   width: 100%;
   padding: 2rem;
@@ -1443,12 +1465,15 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .rr {
   margin-bottom: 1rem;
 }
+
 .op--btn {
   padding: 1rem 2rem;
 }
+
 .forgot {
   font-size: 14px;
   padding: 1rem;
@@ -1456,3 +1481,80 @@ body {
   margin-left: 1rem;
 }
 
+.section-stats {
+  margin-top: 4rem;
+  padding-bottom: 238px;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.stats-card {
+  background-color: #f7f7f7;
+  padding: 1.5rem;
+  border-radius: 10px;
+  flex: 1 1 300px;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+}
+
+.stats-card h3 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.stats-card p {
+  font-size: 1.6rem;
+  margin: 0.5rem 0;
+}
+
+.stats-card strong {
+  font-weight: 700;
+}
+
+.fixed-btn-container {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 1000; /* Ensure the button stays above other content */
+}
+
+.fixed-btn-container .btn {
+  background-color: #28a745; /* Green background */
+  color: #fff; /* White text color */
+  padding: 15px 25px; /* Padding around text */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  text-align: center; /* Center text */
+  font-size: 16px; /* Font size */
+  text-decoration: none; /* Remove underline */
+  display: block; /* Make it a block element */
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+}
+
+.fixed-btn-container .btn:hover {
+  background-color: #218838; /* Darker green on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+.fixed-btn-container .btn:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.5); /* Custom focus outline */
+}
+
+/* Ensure the map container has a specific height and width */
+#map-container {
+  height: 400px; /* Adjust height as needed */
+  width: 100%; /* Adjust width as needed */
+  position: relative; /* Ensure it's properly positioned in its parent */
+  overflow: hidden; /* Hide any overflow */
+}
+
+/* Additional styles for responsive design if needed */
+@media (max-width: 768px) {
+  #map-container {
+    height: 300px; /* Adjust height for smaller screens */
+  }
+}

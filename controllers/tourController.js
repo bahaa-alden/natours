@@ -21,30 +21,75 @@ const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
 export const uploadTourImages = upload.fields([
   { name: 'imageCover', maxCount: 1 },
-  { name: 'images', maxCount: 3 },
+  { name: 'image1', maxCount: 1 },
+  { name: 'image2', maxCount: 1 },
+  { name: 'image3', maxCount: 1 },
 ]);
 export const resizeTourImages = catchAsync(async (req, res, next) => {
-  if (!req.files.imageCover || !req.files.images) return next();
-  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpg`;
+  if (req.body.startDates) {
+    req.body.startDates = JSON.parse(req.body.startDates);
+  }
+  if (req.body.locations) {
+    req.body.locations = JSON.parse(req.body.locations);
+  }
+  if (req.body.startLocation) {
+    req.body.startLocation = JSON.parse(req.body.startLocation);
+  }
+
+  const tour = await Tour.findOne().sort({ createdAt: 1 });
+
+  req.body.guides = tour.guides;
+  if (
+    !req.files.imageCover ||
+    !req.files.image1 ||
+    !req.files.image2 ||
+    !req.files.image3
+  )
+    return next();
+
+  req.body.images = [
+    `tour-${Date.now()}-1.jpg`,
+    `tour-${Date.now()}-2.jpg`,
+    `tour-${Date.now()}-3.jpg`,
+  ];
+  req.body.imageCover = `tour-${Date.now()}-cover.jpg`;
 
   await sharp(req.files.imageCover[0].buffer)
     .resize(2000, 1333)
     .toFormat('jpg')
     .jpeg({ quality: 90 })
     .toFile(`public/img/tours/${req.body.imageCover}`);
-  req.body.images = [];
+
+  await sharp(req.files.image1[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.images[0]}`);
+
+  await sharp(req.files.image2[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.images[1]}`);
+
+  await sharp(req.files.image3[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.images[2]}`);
 
   //we are using map to make the data inside the promise.all an array of promises because forEach does not
-  await Promise.all(
-    req.files.images.map(async (e, i) => {
-      req.body.images.push(`tour-${req.params.id}-${Date.now()}-${i + 1}.jpg`);
-      await sharp(e.buffer)
-        .resize(2000, 1333)
-        .toFormat('jpg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/img/tours/${req.body.images[i]}`);
-    })
-  );
+  // await Promise.all(
+  //   req.files.images.map(async (e, i) => {
+  //     req.body.images.push(`tour-${req.params.id}-${Date.now()}-${i + 1}.jpg`);
+  //     await sharp(e.buffer)
+  //       .resize(2000, 1333)
+  //       .toFormat('jpg')
+  //       .jpeg({ quality: 90 })
+  //       .toFile(`public/img/tours/${req.body.images[i]}`);
+  //   })
+  // );
+
   next();
 });
 
@@ -89,6 +134,7 @@ export const getTourStats = catchAsync(async (req, res, next) => {
     },
   });
 });
+
 export const getMonthlyPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1;
   const plan = await Tour.aggregate([

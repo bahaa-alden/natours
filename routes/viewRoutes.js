@@ -10,7 +10,10 @@ import {
   getResetPasswordForm,
   getMyBookings,
   alerts,
+  getTourStats,
+  getTourForm,
 } from '../controllers/viewController.js';
+import { aliasTopTours } from '../controllers/tourController.js';
 
 const router = Router();
 
@@ -25,6 +28,12 @@ router.use(isLoggedIn);
 router.get('/', getOverview);
 
 router.get('/tour/:slug', getTour);
+
+router.get('/top-5-cheap', aliasTopTours, getOverview);
+
+router.get('/tour-stats', getTourStats);
+
+router.get('/new-tour', getTourForm);
 
 router.get('/login', getLoginForm);
 

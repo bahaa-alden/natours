@@ -4,12 +4,22 @@ import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
 import User from '../models/userModel.js';
 import Booking from '../models/bookingModel.js';
+import APIFeatures from '../utils/apiFeatures.js';
 
 export const getOverview = catchAsync(async (req, res, next) => {
-  //1)Get tour data from Tour collection
-  const tours = await Tour.find();
-  //2)Build the overview page
-  //3)Render overview page using the tour data
+  const filter = {};
+
+  const feature = new APIFeatures(Tour.find(filter), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const docs = await feature.query;
+
+  const tours = await Tour.find({
+    _id: { $in: docs.map((docss) => docss.id) },
+  });
   res.status(200).render('overview', { title: 'All tours', tours });
 });
 
@@ -23,11 +33,42 @@ export const getTour = catchAsync(async (req, res, next) => {
   res.status(200).render('tour', { title: `${tour.name} Tour`, tour });
 });
 
+export const getMostCheapestTours = catchAsync(async (req, res, next) => {
+  const year = 2021;
+  const plan = await Tour.aggregate([
+    { $unwind: '$startDates' },
+    {
+      $match: {
+        startDates: {
+          $gte: new Date(`${year}-01-01`),
+          $lte: new Date(`${year}-12-31`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: '$startDates' },
+        numTours: { $sum: 1 },
+        tours: { $push: '$name' },
+      },
+    },
+    { $addFields: { month: '$_id' } },
+    { $project: { _id: 0 } },
+    { $sort: { numTours: -1 } },
+  ]);
+
+  res.status(200).render('overview', { title: 'All tours', tours: plan });
+});
+
 export const getLoginForm = catchAsync(async (req, res) => {
   res.status(200).render('login', {
     title: 'Log into your account',
     url: ` ${req.protocol}://${req.get('host')}/forgotPassword`,
   });
+});
+
+export const getTourForm = catchAsync(async (req, res) => {
+  res.status(200).render('new-tour', { title: 'Create new tour' });
 });
 
 export const getSignupForm = catchAsync(async (req, res) => {
@@ -77,3 +118,24 @@ export const alerts = (req, res, next) => {
       "Your booking was successful! Please check your email for a confirmation. If your booking does't show up here immediately, please come back later.";
   next();
 };
+
+export const getTourStats = catchAsync(async (req, res, next) => {
+  const stats = await Tour.aggregate([
+    { $match: { ratingsAverage: { $gte: 4.5 } } },
+    {
+      $group: {
+        _id: '$difficulty',
+        numTours: { $sum: 1 },
+        numRatings: { $sum: '$ratingsQuantity' },
+        avgRating: { $avg: '$ratingsAverage' },
+        avgPrice: { $avg: '$price' },
+        minPrice: { $min: '$price' },
+        maxPrice: { $max: '$price' },
+      },
+    },
+  ]);
+  res.status(200).render('stats', {
+    title: 'Tour Stats',
+    stats,
+  });
+});
